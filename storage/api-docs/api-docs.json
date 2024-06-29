@@ -224,32 +224,24 @@
                 ]
             }
         },
-        "/api/contract": {
+        "/api/transaction": {
             "post": {
                 "tags": [
                     "Wallet"
                 ],
-                "summary": "Contract wallet User",
-                "description": "Contract wallet User",
-                "operationId": "8cab79dbc61bcc93c5ac2002b3877244",
+                "summary": "transaction wallet User",
+                "description": "transaction wallet User",
+                "operationId": "e0d30816dea0039dfdce94fee2b5b846",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "fromAddress",
-                                    "keyAddress",
-                                    "toAddress"
+                                    "address"
                                 ],
                                 "properties": {
-                                    "fromAddress": {
-                                        "type": "string"
-                                    },
-                                    "keyAddress": {
-                                        "type": "string"
-                                    },
-                                    "toAddress": {
+                                    "address": {
                                         "type": "string"
                                     }
                                 },

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Watllet;
+use App\Services\EthService;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
 /**
@@ -115,18 +116,16 @@ class WalletController extends Controller
     }
      /**
      * @OA\post(
-     *    path="/api/contract",
-     *    summary="Contract wallet User",
-     *    description="Contract wallet User",
+     *    path="/api/transaction",
+     *    summary="transaction wallet User",
+     *    description="transaction wallet User",
      *    tags={"Wallet"},
      *    security={{"Bearer":{}}},
      *       @OA\RequestBody(
      *       required=true,
      *       @OA\JsonContent(
-     *          required={"fromAddress" ,"keyAddress", "toAddress"},
-     *          @OA\Property(property="fromAddress", type="string"),
-     *          @OA\Property(property="keyAddress", type="string"),
-     *          @OA\Property(property="toAddress", type="string")
+     *          required={"address"},
+     *          @OA\Property(property="address", type="string"),
      *       )
      *    ),
      *    @OA\Response(
@@ -145,15 +144,13 @@ class WalletController extends Controller
      *    )
      * )
      */
-    public function contract(Request $request)
+    public function transaction(Request $request)
     {
         try {
-            $fromAddress  = $request->fromAddress;
-            $keyAddress = $request->keyAddress;
-            $toAddress = $request->toAddress;
-            $price = $request->price;
+            $fromAddress  = $request->address;
+            $eth = new EthService();
             return response()->json([
-                'success' => $this->walletService->contract($fromAddress , $toAddress , $keyAddress , $price ),
+                'success' => $eth->transaction($fromAddress  ),
             ],200);
         } catch (\Throwable $th) {
              return response()->json([

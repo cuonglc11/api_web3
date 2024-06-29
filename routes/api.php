@@ -20,7 +20,7 @@ Route::post('register',[AuthController::class ,'register']);
 Route::group(['prefix' => ''], function() {
     Route::post('createWallet',[WalletController::class ,'createWallet']);
     Route::get('listWallet',[WalletController::class ,'listWallet']);
-    Route::post('contract' ,[WalletController::class,'contract']);
+    Route::post('transaction' ,[WalletController::class,'transaction']);
 });
 
 
