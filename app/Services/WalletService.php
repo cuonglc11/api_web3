@@ -21,7 +21,7 @@ class WalletService {
         $createWallet->customer_id =   Auth::id();
         $createWallet->address_wallet = $address;
         $createWallet->private_key = $key;
-        $createWallet->blance = \Web3\Utils::hexToDec($this->web3->eth()->getBalance($address));
+        $createWallet->blance = 0;
         $createWallet->save();
         return [
             'customer' => $createWallet->user->name,
@@ -59,6 +59,7 @@ class WalletService {
                 return [
                 'not fount wallet'
             ];
+            return $listWallet;
             } catch (\Throwable $th) {
                 throw new \Exception("Error Processing Request", $th->getMessage());
 
@@ -71,14 +72,15 @@ class WalletService {
 
             return;
         }
-        $balanceInWei = \Web3\Utils::hexToDec($this->web3->eth()->getBalance($data->address_wallet));
-        $sepolia =  bcdiv($balanceInWei, bcpow('10', '18', 0), 0);
+         $eth = new EthService();
+         $sepolia = $eth->getBalance($data->address_wallet);
         if($data->blance !==  $sepolia ) {
             $data->blance = $sepolia;
             $data->save();
             return;
         }
         return;
+        // $data->address_wallet
 
     }
 }

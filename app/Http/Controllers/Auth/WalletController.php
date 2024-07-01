@@ -116,6 +116,51 @@ class WalletController extends Controller
     }
      /**
      * @OA\post(
+     *    path="/api/balance",
+     *    summary="balance wallet User",
+     *    description="balance wallet User",
+     *    tags={"Wallet"},
+     *    security={{"Bearer":{}}},
+     *       @OA\RequestBody(
+     *       required=true,
+     *       @OA\JsonContent(
+     *          required={"address"},
+     *          @OA\Property(property="address", type="string"),
+     *       )
+     *    ),
+     *    @OA\Response(
+     *       response=200,
+     *       description="Wallet listed successfully",
+     *       @OA\JsonContent(
+     *          @OA\Property(property="success", type="object", ref="#/components/schemas/Wallet")
+     *       )
+     *    ),
+     *    @OA\Response(
+     *       response=400,
+     *       description="Bad request",
+     *       @OA\JsonContent(
+     *          @OA\Property(property="err", type="string")
+     *       )
+     *    )
+     * )
+     */
+    public function balance(Request $request)
+    {
+        try {
+            $fromAddress  = $request->address;
+            $eth = new EthService();
+            return response()->json([
+                'success' => $eth->getBalance($fromAddress),
+            ],200);
+        } catch (\Throwable $th) {
+             return response()->json([
+                'err' => $th->getMessage(),
+             ],400);
+        }
+
+    }
+  /**
+     * @OA\post(
      *    path="/api/transaction",
      *    summary="transaction wallet User",
      *    description="transaction wallet User",
@@ -150,14 +195,55 @@ class WalletController extends Controller
             $fromAddress  = $request->address;
             $eth = new EthService();
             return response()->json([
-                'success' => $eth->transaction($fromAddress  ),
+                'success' => $eth->getTransactions($fromAddress),
             ],200);
         } catch (\Throwable $th) {
              return response()->json([
                 'err' => $th->getMessage(),
              ],400);
         }
-
     }
-
+      /**
+     * @OA\post(
+     *    path="/api/transactionhash",
+     *    summary="transaction hash wallet User",
+     *    description="transaction hash wallet User",
+     *    tags={"Wallet"},
+     *    security={{"Bearer":{}}},
+     *       @OA\RequestBody(
+     *       required=true,
+     *       @OA\JsonContent(
+     *          required={"hash"},
+     *          @OA\Property(property="hash", type="string"),
+     *       )
+     *    ),
+     *    @OA\Response(
+     *       response=200,
+     *       description="Wallet listed successfully",
+     *       @OA\JsonContent(
+     *          @OA\Property(property="success", type="object", ref="#/components/schemas/Wallet")
+     *       )
+     *    ),
+     *    @OA\Response(
+     *       response=400,
+     *       description="Bad request",
+     *       @OA\JsonContent(
+     *          @OA\Property(property="err", type="string")
+     *       )
+     *    )
+     * )
+     */
+    public function transactionHash(Request $request)
+    {
+        try {
+            $eth = new EthService();
+            return response()->json([
+                'success' => $eth->transactionHash($request->hash),
+            ],200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'err' => $th->getMessage(),
+             ],400);
+        }
+    }
 }
