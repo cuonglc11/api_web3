@@ -24,7 +24,6 @@ Route::group(['prefix' => ''], function() {
     Route::post('transaction' ,[WalletController::class,'transaction']);
     Route::post('transactionhash' ,[WalletController::class,'transactionHash']);
 
-
 });
 
 
